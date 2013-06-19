@@ -69,4 +69,4 @@ file3.write('<?xml version = "1.0" encoding = "utf-8"?>')
 file3.write("\n")
 for line in corrected:
 	file3.write(line)
-file3.write('<?/xml>')
+file3.write('<?/xml?>')
