@@ -1,8 +1,6 @@
 #This script is reposibale for executing all actions related to managing a list of files (and directories).
-import shutil
 import os
 from bs4 import BeautifulSoup
-import datetime
 from time import localtime
 
 def computeDirectory(dir, homeDirectory, masterRecord):
