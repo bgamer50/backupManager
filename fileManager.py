@@ -1,7 +1,9 @@
-#This script is reposible for executing all actions related to managing a list of files (and directories).
+#This script is reposibale for executing all actions related to managing a list of files (and directories).
 import shutil
 import os
 from bs4 import BeautifulSoup
+import datetime
+from time import localtime
 
 def computeDirectory(dir, homeDirectory, masterRecord):
 	fileRecord = BeautifulSoup('<directory>', 'xml')
@@ -9,7 +11,8 @@ def computeDirectory(dir, homeDirectory, masterRecord):
 	masterRecord = fileRecord
 
 	modifiedTag = fileRecord.new_tag('modified')	
-	modifiedTag.string = "01-01-1970 0:00"
+	#modifiedTag.string = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+	modifiedTag.string = str(os.stat(homeDirectory + "/" + dir).st_mtime)
 	fileRecord.directory.append(modifiedTag)
 	
 	#Add files and subdirs to XML
@@ -23,6 +26,7 @@ def computeDirectory(dir, homeDirectory, masterRecord):
 	for f in fileOnlyTree:
 		fileTag = fileRecord.new_tag('file')
 		fileTag.string = f
+		fileTag.attrs['modified'] = str(os.stat(homeDirectory + "/" + dir).st_mtime)
 		fileRecord.directory.append(fileTag)
 		
 	for d in directoryOnlyTree:
@@ -51,20 +55,21 @@ for dir in directories:
 	fileRecord = computeDirectory(dir, homeDirectory, None)
 	fileRecords.append(fileRecord)
 
-file = open("test.xml", 'w')
+xmlFile = homeDirectory + "/.backupManager/newIndex.xml"
+file = open(xmlFile, 'w')
 for f in fileRecords:
 	file.write(f.prettify())
 	print("\n")
 file.close()
 
-file2 = open("test.xml")
+file2 = open(xmlFile)
 corrected = []
 for line in file2:
 	if "?xml" not in line:
 		corrected.append(line)
 file2.close()
 
-file3 = open("test.xml", 'w')
+file3 = open(xmlFile, 'w')
 file3.write('<?xml version = "1.0" encoding = "utf-8"?>')
 file3.write("\n")
 for line in corrected:
