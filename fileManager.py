@@ -24,7 +24,7 @@ def computeDirectory(dir, homeDirectory, masterRecord):
 	for f in fileOnlyTree:
 		fileTag = fileRecord.new_tag('file')
 		fileTag.string = f
-		fileTag.attrs['modified'] = str(os.stat(homeDirectory + "/" + dir).st_mtime)
+		fileTag.attrs['modified'] = str(os.stat(homeDirectory + "/" + dir + "/" + f).st_mtime)
 		fileRecord.directory.append(fileTag)
 		
 	for d in directoryOnlyTree:
