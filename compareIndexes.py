@@ -1,5 +1,5 @@
 #Compares the current files to the list of the last backup.
-#Unfinished
+#Unfinished, test only
 import os
 
 homeDirectory = os.path.expanduser(os.path.join('~'))
@@ -18,31 +18,35 @@ class file:
 		self.name = n
 		self.modified = m
 
+#Retrieves info from index files.
+def retrieveInfo(readIndex):
+	dirList = {}
+
+	dirpaths = [] #Used as a stack.
+	index = 0
+	while index < len(readIndex):
+		line = readIndex[index].rstrip()
+		if line == "d":
+			index += 1
+			dirpaths.append(readIndex[index].rstrip())
+			if readIndex[index].rstrip() not in dirList:
+				dirList[readIndex[index].rstrip()] = []
+		elif line == "ed":
+			dirpaths.pop()
+		elif line == "f":
+			index += 1
+			newfile = file(readIndex[index].rstrip(), readIndex[index + 1].rstrip())
+			index += 1
+			dirList[dirpaths[len(dirpaths) - 1]].append(newfile)	
+		index += 1
+	return dirList
+
 mainIndex = open(oldIndexPath).readlines()
-prevIndex = open(newIndexPath)
-
-currentDirList = {}
-
-dirpaths = [] #Used as a stack.
-index = 0
-while index < len(mainIndex):
-	line = mainIndex[index].rstrip()
-	if line == "d":
-		index += 1
-		dirpaths.append(mainIndex[index].rstrip())
-		if mainIndex[index].rstrip() not in currentDirList:
-			currentDirList[mainIndex[index].rstrip()] = []
-	elif line == "ed":
-		dirpaths.pop()
-	elif line == "f":
-		index += 1
-		newfile = file(mainIndex[index].rstrip(), mainIndex[index + 1].rstrip())
-		index += 1
-		currentDirList[dirpaths[len(dirpaths) - 1]].append(newfile)	
-	index += 1
-
-for d in currentDirList:
-	print(d + " {")
-	for f in currentDirList[d]:
-		print(f.name + " " + f.modified)
-	print("}")
+prevIndex = open(newIndexPath).readlines()
+currentDirList = retrieveInfo(mainIndex)
+previousDirList = retrieveInfo(prevIndex)
+#for d in currentDirList:
+#       print(d + " {")
+#       for f in currentDirList[d]:
+#               print(f.name + " " + f.modified)
+#       print("}")
