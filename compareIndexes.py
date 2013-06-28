@@ -1,4 +1,5 @@
 #Compares the current files to the list of the last backup.
+#Now actually compares, generating and (at the moment) printing a list of files that need to be backed up.
 #Unfinished, test only
 import os
 
@@ -9,7 +10,7 @@ newIndexPath = homeDirectory + "/" + ".backupManager/main_old.index"
 os.rename(oldIndexPath, newIndexPath)
 os.system("python createIndex.py main.index")
 
-#This is the part where I go through the xml files and create an array of file paths that need to be backed up.
+#This is the part where I go through the files and create an array of file paths that need to be backed up.
 #This begins with creating a file class that holds file info.
 class file:
 	name = ""
@@ -50,3 +51,30 @@ previousDirList = retrieveInfo(prevIndex)
 #       for f in currentDirList[d]:
 #               print(f.name + " " + f.modified)
 #       print("}")
+
+#Now, there will be comparisons between the two indexes.  A list will be generated with everything that has been changed since the last backup and anything new.
+backupList = {}
+for dir in currentDirList:
+	if dir not in previousDirList:
+		backupList[dir] = curentDirList[dir]
+	else: #search through files
+		for f in currentDirList[dir]:
+			found = 0
+			for oldF in previousDirList[dir]:
+				if f.name == oldF.name:
+					found = 1
+					if f.modified > oldF.modified:
+						if dir not in backupList:
+							backupList[dir] = []
+						backupList[dir].append(f)
+					break
+			if found == 0:
+				if dir not in backupList:
+					backupList[dir] = []
+				backupList[dir].append(f)
+print("hello")
+for d in backupList:
+       print(d + " {")
+       for f in backupList[d]:
+               print(f.name + " " + f.modified)
+       print("}")
