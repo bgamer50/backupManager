@@ -1,4 +1,5 @@
 from Tkinter import *
+import compareIndexes
 import os
 
 homeDirectory = os.path.expanduser(os.path.join('~'))
@@ -10,6 +11,8 @@ class mainWindow(Frame):
 		for v in self.varList:
 			if self.varList[v].get() == 1:
 				listFile.write(v + "\n")
+		compareIndexes
+		#exit()
 
 	def __init__(self, parent, directories):
 		Frame.__init__(self, parent, background = "gray")
@@ -31,7 +34,7 @@ class mainWindow(Frame):
 				indexY = -1
 				indexX += 1
 			indexY += 1
-		button = Button(parent, text = "Confirm", command = self.callback)
+		button = Button(parent, text = "Start Backup", command = self.callback)
 		button.place(x = 520, y = 400)
 
 fileTree = os.listdir(homeDirectory)
@@ -40,6 +43,10 @@ for(dirpath, dirnames, filenames) in os.walk(homeDirectory):
 	fileOnlyTree.extend(filenames)
 	break
 directoryOnlyTree = list(set(fileTree) - set(fileOnlyTree))
+for d in directoryOnlyTree:
+	if d[0] == ".":
+		directoryOnlyTree.remove(d)
+directoryOnlyTree.remove(".backupManager")
 
 root = Tk()
 root.geometry("640x480+300+300")
