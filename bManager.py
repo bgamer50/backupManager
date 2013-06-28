@@ -2,6 +2,9 @@ from Tkinter import *
 import compareIndexes
 import os
 
+#This script handles the GUI.  The user can choose which directories to back up and then start the indexing process.
+#At the moment, the actual backup is not handled yet by this program.
+
 homeDirectory = os.path.expanduser(os.path.join('~'))
 
 class mainWindow(Frame):
@@ -12,7 +15,7 @@ class mainWindow(Frame):
 			if self.varList[v].get() == 1:
 				listFile.write(v + "\n")
 		compareIndexes
-		#exit()
+		exit()
 
 	def __init__(self, parent, directories):
 		Frame.__init__(self, parent, background = "gray")
