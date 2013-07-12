@@ -49,13 +49,15 @@ directoryOnlyTree = list(set(fileTree) - set(fileOnlyTree))
 for d in directoryOnlyTree:
 	if d[0] == ".":
 		directoryOnlyTree.remove(d)
-#For some reason, it still doesn't remove some directories starting with '.'.  For now those are going to be left in with the exception of .config since attempting to index that directory is impossible.  .backupManager and .Trash are removed as well.
+#For some reason, it still doesn't remove some directories starting with '.'.  For now those are going to be left in with the exception of .config since attempting to index that directory is impossible.  .backupManager, Library, and .Trash are removed as well.
 if ".backupManager" in directoryOnlyTree:
     directoryOnlyTree.remove(".backupManager")
 if ".config" in directoryOnlyTree:
     directoryOnlyTree.remove(".config")
 if ".Trash" in directoryOnlyTree:
     directoryOnlyTree.remove(".Trash")
+if "Library" in directoryOnlyTree:
+    directoryOnlyTree.remove("Library")
 
 root = Tk()
 root.geometry("640x480+300+300")

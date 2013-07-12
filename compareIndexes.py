@@ -78,8 +78,10 @@ for dir in currentDirList:
 					backupList[dir] = []
 				backupList[dir].append(f)
 print("hello")
+infoFile = open(homeDirectory + "/.backupManager/info", "w")
 for d in backupList:
-       print(d + " {")
+       infoFile.write(d + " {")
        for f in backupList[d]:
-               print(f.name + " " + f.modified)
-       print("}")
+               infoFile.write(f.name + " " + f.modified)
+       infoFile.write("}")
+infoFile.close()
