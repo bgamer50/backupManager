@@ -7,6 +7,11 @@ homeDirectory = os.path.expanduser(os.path.join('~'))
 oldIndexPath = homeDirectory + "/" + ".backupManager/main.index"
 newIndexPath = homeDirectory + "/" + ".backupManager/main_old.index"
 
+if not os.path.exists(oldIndexPath):
+    aFile = open(homeDirectory + "/.backupManager/main.index", "w")
+    aFile.write("")
+    aFile.close()
+
 os.rename(oldIndexPath, newIndexPath)
 os.system("python createIndex.py main.index")
 
@@ -56,7 +61,7 @@ previousDirList = retrieveInfo(prevIndex)
 backupList = {}
 for dir in currentDirList:
 	if dir not in previousDirList:
-		backupList[dir] = curentDirList[dir]
+		backupList[dir] = currentDirList[dir]
 	else: #search through files
 		for f in currentDirList[dir]:
 			found = 0
