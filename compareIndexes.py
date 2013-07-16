@@ -2,6 +2,7 @@
 #Now actually compares, generating and (at the moment) printing a list of files that need to be backed up.
 #Unfinished, test only
 import os
+import cPickle
 
 homeDirectory = os.path.expanduser(os.path.join('~'))
 oldIndexPath = homeDirectory + "/" + ".backupManager/main.index"
@@ -79,9 +80,18 @@ for dir in currentDirList:
 				backupList[dir].append(f)
 print("hello")
 infoFile = open(homeDirectory + "/.backupManager/info", "w")
-for d in backupList:
-       infoFile.write(d + " {")
-       for f in backupList[d]:
-               infoFile.write(f.name + " " + f.modified)
-       infoFile.write("}")
-infoFile.close()
+cPickle.dump(backupList, infoFile, 1)
+    #for d in backupList:
+    #    infoFile.write("d " + d + "\n")
+    #    for f in backupList[d]:
+    #        sTemp = cPickle.dumps(d, 1)
+    #        infoFile.write(sTemp + "\n")
+#        infoFile.write("ed\n")
+#infoFile.close()
+
+#for d in backupList:
+    #infoFile.write(d + " {")
+    #for f in backupList[d]:
+        #infoFile.write(f.name + " " + f.modified)
+        #infoFile.write("}")
+#infoFile.close()
