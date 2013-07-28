@@ -7,6 +7,11 @@ def retrieveData(homeDirectory):
     dataFile = open(homeDirectory + "/.backupManager/info", "rb")
     return cPickle.load(dataFile)
 
+def uploadFile(name, path, ftp):
+    file = open(path, "rb")
+    ftp.storbinary("STOR " + name)
+    file.close()
+
 homeDirectory = os.path.expanduser(os.path.join('~'))
 configFile = open(homeDirectory + "/.backupManager/FTP.config")
 url = configFile.readline().rstrip()
@@ -20,5 +25,12 @@ ftp.login(username, password)
 data = retrieveData(homeDirectory)
 for d in data:
     print(d + ":")
+    ftp.cwd("~")
+    try:
+        ftp.cwd(d)
+    except:
+        ftp.mkd(d)
+        ftp.cwd(d)
     for f in data[d]:
         print(f.name + "\n" + f.modified + "\n\n")
+        uploadFile(f.name, homeDirectory + "/" + d, ftp)
